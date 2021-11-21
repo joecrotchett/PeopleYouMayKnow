@@ -7,9 +7,14 @@
 
 import Foundation
 
+/**
+I'm using the `Repository` pattern here to hide away the details of how the search result
+data is retrieved. For this app, it's not absolutely necessary, since we're only pulling
+data from the API, and in this case, a json file,  but it's still a good pattern to have in place in the event that we
+wanted to introduce other data access objects, like persisting data in a local data store, for example.
+*/
+
 final class PeopleDataManager {
-    
-    let userName = "Facebook Candidate"
     
     private let api: PeopleAPI
     private var pymk = [[Person]]()
@@ -18,17 +23,12 @@ final class PeopleDataManager {
         self.api = api
     }
     
-    /**
-    I'm using the `Repository` pattern here to hide away the details of how the search result
-    data is retrieved. For this app, it's not absolutely necessary, since we're only pulling
-    data from the API, and in this case, a json file,  but it's still a good pattern to have in place in the event that we
-    wanted to introduce other data access objects, like persisting data in a local data store, for example.
-    */
     func getPeopleGroupedBySocialDistance(completion: @escaping (Result<[[Person]], APIError>) -> Void) {
         api.getPeople { result in
             switch result {
             case .success(let people):
-                let groups = self.groupBySocialDistance(people: people)
+                let graph = self.constructGraph(from: people)
+                let groups = self.groupBySocialDistance(graph: graph)
                 completion(.success(groups))
 
             case .failure(let error):
@@ -37,32 +37,42 @@ final class PeopleDataManager {
         }
     }
     
-    private func groupBySocialDistance(people: [Person]) -> [[Person]] {
-        let graph = self.constructGraph(from: people)
-        guard let nodeGroups = graph?.nodesGroupedByDistance else { return [] }
+    // MARK: Private
+    
+    private func groupBySocialDistance(graph: Graph) -> [[Person]] {
+        let nodeGroups = graph.nodesGroupedByDistance
         
-        var groupsByDistance = [[Person]]()
-        var distance = 1
+        // Convert the dictionary of groupings into an array of groupings to
+        // make it easier for the tableview datasource to undestand the groupings
+        var peopleGroups = [[Person]]()
+        var distance = 1 // Skip over the user group, and the users's friends group
         while let group = nodeGroups[distance] {
             let people = group.map { $0.person }
-            groupsByDistance.append(people)
+//            if distance == 2, let friendNodes = nodeGroups[1] {
+//                let friends = friendNodes.map { $0.person }
+//                let mutualConnections = mutualConnections(friends: friends, others: people)
+//                groupsByDistance.append(mutualConnections)
+//            } else {
+//                groupsByDistance.append(people)
+//            }
+            
+            peopleGroups.append(people)
             distance += 1
         }
         
-        return groupsByDistance
+        return peopleGroups
     }
     
-    private func constructGraph(from people: [Person]) -> Graph? {
-        let user = people.first(where: { $0.name ==  userName})
-        let others = people.filter({ $0.name != userName })
+    private func constructGraph(from people: [Person]) -> Graph {
+        let graph = Graph()
+        let user = people.first(where: { $0.isUser})
+        let others = people.filter({ !$0.isUser })
         
         guard let user = user, !others.isEmpty else {
-            return nil
+            return graph
         }
         
-        let graph = Graph()
         var nodes = [Int: Node]()
-        
         let userNode = graph.addNode(person: user)
         nodes[user.id] = userNode
         
@@ -75,6 +85,9 @@ final class PeopleDataManager {
             for friend in person.friends {
                 if let friendNode = nodes[friend], let personNode = personNode {
                     graph.addEdge(personNode, neighbor: friendNode)
+                    if personNode == userNode {
+                        friendNode.markAsFriend()
+                    }
                 }
             }
         }
@@ -102,5 +115,11 @@ final class PeopleDataManager {
 
       return shortestPathGraph
     }
+    
+//    private func mutualConnections(friends: [Person], others: [Person]) -> [Person] {
+//        for person in others {
+//
+//        }
+//    }
 }
 
