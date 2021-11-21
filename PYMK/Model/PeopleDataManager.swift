@@ -23,13 +23,14 @@ final class PeopleDataManager {
         self.api = api
     }
     
-    func getPeopleYouMayKnow(completion: @escaping (Result<[[Person]], APIError>) -> Void) {
+    func getPeopleYouMayKnow(completion: @escaping (Result<[Person], APIError>) -> Void) {
         api.getPeople { result in
             switch result {
             case .success(let people):
                 let graph = self.constructGraph(from: people)
                 let groups = self.groupBySocialDistance(graph: graph)
-                completion(.success(groups))
+                let pymk = Array(groups.joined())
+                completion(.success(pymk))
 
             case .failure(let error):
                 completion(.failure(error))
@@ -106,7 +107,9 @@ final class PeopleDataManager {
                 }
                 
                 // At each level of the tree, determine the number of mutual connections
-                // to the neightbor nodes
+                // to the neightbor nodes. This number is only used for people who are
+                // friends of friends, but the algorithm is cleaner, and it's just as
+                // performant to set this for everyone.
                 if neighborNode.distance! > current.distance! {
                     neighborNode.increaseMutualFriendCount()
                 }

@@ -9,23 +9,12 @@ import UIKit
 
 struct StyleGuide {
     static func apply(to window: UIWindow) {
-        let tabBar = UITabBar.appearance()
-        tabBar.barTintColor = .darkGray
-
         let navBar = UINavigationBar.appearance()
-        navBar.barTintColor = .darkGray
-        navBar.tintColor = .black
-        navBar.titleTextAttributes = [.foregroundColor : UIColor.black]
-
-        let searchBarTextFields = UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self])
-        searchBarTextFields.defaultTextAttributes = [
-            .foregroundColor : UIColor.black,
-            .font : UIFont.boldSystemFont(ofSize: 14)
-        ]
+        navBar.titleTextAttributes = [.foregroundColor : StyleGuide.Colors.yellow]
     }
 
     struct Colors {
-        static var alamoYellow = UIColor(0xE7B547)
+        static var yellow = UIColor(0xE7B547)
     }
 }
 

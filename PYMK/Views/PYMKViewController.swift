@@ -16,16 +16,15 @@ final class PYMKViewController: NiblessViewController {
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.backgroundColor = .black
         tableView.separatorColor = .lightGray
-//        tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.reuseIdentifier)
-//        tableView.register(SearchResultsHeaderView.self, forHeaderFooterViewReuseIdentifier: headerViewReuseIdentifier)
+        tableView.register(PYMKCell.self, forCellReuseIdentifier: PYMKCell.reuseIdentifier)
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
-        tableView.delegate = self
         return tableView
     }()
     
-    private var peopleGroups = [[Person]]()
+    private var people = [Person]()
     
     override init() {
         let api = JSONAPI(filename: "mock")
@@ -50,8 +49,8 @@ final class PYMKViewController: NiblessViewController {
         activityIndicator.startAnimating()
         dataManager.getPeopleYouMayKnow { result in
             switch result {
-            case .success(let peopleGroups):
-                self.show(peopleGroups)
+            case .success(let people):
+                self.show(people)
             case .failure(let error):
                 self.show(error)
             }
@@ -60,19 +59,20 @@ final class PYMKViewController: NiblessViewController {
     
     // MARK: Public Interface
     
+    func show(_ people: [Person]) {
+        self.people = people
+        activityIndicator.stopAnimating()
+        tableView.isHidden = false
+        tableView.reloadData()
+    }
+    
     func show(_ error: APIError) {
         tableView.isHidden = true
         activityIndicator.stopAnimating()
         
-        // TODO: Show error dialog
-    }
-    
-    func show(_ peopleGroups: [[Person]]) {
-        self.peopleGroups = peopleGroups
-        print(peopleGroups)
-        activityIndicator.stopAnimating()
-        tableView.isHidden = false
-        tableView.reloadData()
+        let alert = UIAlertController(title: "Whoops!", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: Private
@@ -97,7 +97,7 @@ final class PYMKViewController: NiblessViewController {
     
     private func updateColors() {
         view.backgroundColor = .black
-        activityIndicator.color = StyleGuide.Colors.alamoYellow
+        activityIndicator.color = StyleGuide.Colors.yellow
     }
 }
     
@@ -105,45 +105,14 @@ final class PYMKViewController: NiblessViewController {
 
 extension PYMKViewController: UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        peopleGroups.count
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        peopleGroups[section].count
+        people.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell: SearchResultCell = tableView.dequeueReusableCell(for: indexPath)
-//        let result = results[indexPath.row]
-//        cell.configure(with: result)
-//
-        let person = peopleGroups[indexPath.section][indexPath.row]
-        let cell = UITableViewCell()
-        cell.textLabel?.text = person.name
-        cell.detailTextLabel?.text = "Social Distance: \(indexPath.row + 1)"
+        let person = people[indexPath.row]
+        let cell: PYMKCell = tableView.dequeueReusableCell(for: indexPath)
+        cell.configure(with: person)
         return cell
-    }
-}
-
-// MARK: UITableViewDelegate
-
-extension PYMKViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard !peopleGroups[section].isEmpty else {
-            return 0
-        }
-        
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection sectionIndex: Int) -> UIView? {
-        guard !peopleGroups[sectionIndex].isEmpty else {
-            return nil
-        }
-        
-//        return tableView.dequeueReusableHeaderFooterView(withIdentifier: headerViewReuseIdentifier) as? SearchResultsHeaderView
-        return nil
     }
 }

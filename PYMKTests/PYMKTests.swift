@@ -18,7 +18,7 @@ class MockAPI: PeopleAPI {
         people.append(Person(id: 4, name: "Friend-Of-Friend-1-2", friends: [3, 2, 8], mutualCount: nil))
         people.append(Person(id: 5, name: "Friend-2", friends: [1, 6, 7], mutualCount: nil))
         people.append(Person(id: 6, name: "Friend-3", friends: [1, 5, 7], mutualCount: nil))
-        people.append(Person(id: 7, name: "Friend-Of-Friend-2-Friend-3", friends: [5, 6], mutualCount: nil))
+        people.append(Person(id: 7, name: "Friend-Of-Friend-2-and-Friend-3", friends: [5, 6], mutualCount: nil))
         people.append(Person(id: 8, name: "Friend-Of-Friend-Of-Friend-1-2", friends: [4], mutualCount: nil))
         completion(.success(people))
     }
@@ -26,7 +26,7 @@ class MockAPI: PeopleAPI {
 
 class PYMKTests: XCTestCase {
     
-    private var people = [[Person]]()
+    private var people = [Person]()
     
     // Swift
     override func setUp() {
@@ -54,64 +54,56 @@ class PYMKTests: XCTestCase {
     }
     
     func testPeopleYouMayKnowDoesNotIncludePeopleYouDoKnow() {
-        let allPeople = people.joined()
-        
-        XCTAssertFalse(allPeople.contains(where: { $0.name == "Facebook Candidate"}))
-        XCTAssertFalse(allPeople.contains(where: { $0.name == "Friend-1"}))
-        XCTAssertFalse(allPeople.contains(where: { $0.name == "Friend-2"}))
-        XCTAssertFalse(allPeople.contains(where: { $0.name == "Friend-3"}))
+        XCTAssertFalse(people.contains(where: { $0.name == "Facebook Candidate"}))
+        XCTAssertFalse(people.contains(where: { $0.name == "Friend-1"}))
+        XCTAssertFalse(people.contains(where: { $0.name == "Friend-2"}))
+        XCTAssertFalse(people.contains(where: { $0.name == "Friend-3"}))
     }
     
     func testPeopleYouMayKnowIncludesPeopleYouMayKnow() {
-        let allPeople = people.joined()
-        
-        XCTAssertTrue(allPeople.contains(where: { $0.name == "Friend-Of-Friend-1-1"}))
-        XCTAssertTrue(allPeople.contains(where: { $0.name == "Friend-Of-Friend-1-2"}))
-        XCTAssertTrue(allPeople.contains(where: { $0.name == "Friend-Of-Friend-2-Friend-3"}))
-        XCTAssertTrue(allPeople.contains(where: { $0.name == "Friend-Of-Friend-Of-Friend-1-2"}))
+        XCTAssertTrue(people.contains(where: { $0.name == "Friend-Of-Friend-1-1"}))
+        XCTAssertTrue(people.contains(where: { $0.name == "Friend-Of-Friend-1-2"}))
+        XCTAssertTrue(people.contains(where: { $0.name == "Friend-Of-Friend-2-and-Friend-3"}))
+        XCTAssertTrue(people.contains(where: { $0.name == "Friend-Of-Friend-Of-Friend-1-2"}))
     }
     
     func testPeopleYouMayKnowHaveCorrectSocialDistance() {
-        let allPeople = people.joined()
-        
-        if let candidate = allPeople.first(where: { $0.name == "Facebook Candidate"}) {
+        if let candidate = people.first(where: { $0.name == "Facebook Candidate"}) {
             XCTAssertTrue(candidate.distance == 0)
         }
         
-        if let candidate = allPeople.first(where: { $0.name == "Friend-1"}) {
+        if let candidate = people.first(where: { $0.name == "Friend-1"}) {
             XCTAssertTrue(candidate.distance == 1)
         }
         
-        if let candidate = allPeople.first(where: { $0.name == "Friend-2"}) {
+        if let candidate = people.first(where: { $0.name == "Friend-2"}) {
             XCTAssertTrue(candidate.distance == 1)
         }
         
-        if let candidate = allPeople.first(where: { $0.name == "Friend-3"}) {
+        if let candidate = people.first(where: { $0.name == "Friend-3"}) {
             XCTAssertTrue(candidate.distance == 1)
         }
         
-        if let candidate = allPeople.first(where: { $0.name == "Friend-Of-Friend-1-1"}) {
+        if let candidate = people.first(where: { $0.name == "Friend-Of-Friend-1-1"}) {
             XCTAssertTrue(candidate.distance == 2)
         }
         
-        if let candidate = allPeople.first(where: { $0.name == "Friend-Of-Friend-1-2"}) {
+        if let candidate = people.first(where: { $0.name == "Friend-Of-Friend-1-2"}) {
             XCTAssertTrue(candidate.distance == 2)
         }
         
-        if let candidate = allPeople.first(where: { $0.name == "Friend-Of-Friend-2-Friend-3"}) {
+        if let candidate = people.first(where: { $0.name == "Friend-Of-Friend-2-and-Friend-3"}) {
             XCTAssertTrue(candidate.distance == 2)
         }
                                                 
-        if let candidate = allPeople.first(where: { $0.name == "Friend-Of-Friend-Of-Friend-1-2"}) {
+        if let candidate = people.first(where: { $0.name == "Friend-Of-Friend-Of-Friend-1-2"}) {
             XCTAssertTrue(candidate.distance == 3)
         }
     }
     
     func testFriendsOfFriendsAreOrderedByMutualFriendCount() {
-        let friendsOfFriends = people[0]
-        
-        XCTAssertTrue(friendsOfFriends[0].name == "Friend-Of-Friend-2-Friend-3")
-        XCTAssertTrue(friendsOfFriends[1].name == "Friend-Of-Friend-1-1")
-        XCTAssertTrue(friendsOfFriends[2].name == "Friend-Of-Friend-1-2")
+        XCTAssertTrue(people[0].name == "Friend-Of-Friend-2-and-Friend-3")
+        XCTAssertTrue(people[1].name == "Friend-Of-Friend-1-1")
+        XCTAssertTrue(people[2].name == "Friend-Of-Friend-1-2")
     }
 }
