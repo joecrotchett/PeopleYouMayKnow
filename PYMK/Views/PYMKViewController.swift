@@ -12,6 +12,9 @@ import UIKit
 final class PYMKViewController: NiblessViewController {
     
     private let dataManager: PeopleDataManager
+    private var people = [Person]()
+    
+    // MARK: View Components
     
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private lazy var tableView: UITableView = {
@@ -24,20 +27,17 @@ final class PYMKViewController: NiblessViewController {
         return tableView
     }()
     
-    private var people = [Person]()
+    // MARK: View Lifecycle
     
     override init() {
         let api = JSONAPI(filename: "mock")
         self.dataManager = PeopleDataManager(api: api)
-        
         super.init()
-        configureLayout()
-        title = "People You May Know"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "People You May Know"
         configureLayout()
         updateColors()
     }
@@ -91,7 +91,7 @@ final class PYMKViewController: NiblessViewController {
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
     

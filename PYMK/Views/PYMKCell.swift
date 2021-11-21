@@ -14,6 +14,8 @@ import UIKit
         static let verticalMargin: CGFloat = 15
     }
     
+    // MARK: View Components
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0

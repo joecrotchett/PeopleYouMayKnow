@@ -135,9 +135,9 @@
 		D88D2C7D2749B77900F7481F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D88D2C8E274AFDA200F7481F /* PYMKCell.swift */,
 				D8E43A6127497CF3009A8931 /* PYMKViewController.swift */,
 				D88D2C7E2749B7D300F7481F /* NiblessViewController.swift */,
-				D88D2C8E274AFDA200F7481F /* PYMKCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

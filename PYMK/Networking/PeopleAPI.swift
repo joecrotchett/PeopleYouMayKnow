@@ -15,6 +15,8 @@ protocol PeopleAPI {
 
 // MARK: APIError
 
+// Only `decodingError` is used in the current implementation,
+// but the rest are here to support network-based implemenations
 enum APIError : Error {
     case networkingError(Error)
     case serverError

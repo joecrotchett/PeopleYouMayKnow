@@ -8,9 +8,9 @@
 import Foundation
 
 /**
-I'm using the `Repository` pattern here to hide away the details of how the search result
-data is retrieved. For this app, it's not absolutely necessary, since we're only pulling
-data from the API, and in this case, a json file,  but it's still a good pattern to have in place in the event that we
+I'm using the `Repository` pattern here to hide away the details of how the PYMK
+data is retrieved. For this app, it's not absolutely necessary, since we're only pulling data
+from the API, and in this case, a json file,  but it's still a good pattern to have in place in the event that we
 wanted to introduce other data access objects, like persisting data in a local data store, for example.
 */
 
@@ -27,9 +27,8 @@ final class PeopleDataManager {
         api.getPeople { result in
             switch result {
             case .success(let people):
-                let graph = self.constructGraph(from: people)
-                let groups = self.groupBySocialDistance(graph: graph)
-                let pymk = Array(groups.joined())
+                let graph = self.constructPeopleGraph(from: people)
+                let pymk = self.generatePYMKList(from: graph)
                 completion(.success(pymk))
 
             case .failure(let error):
@@ -40,7 +39,8 @@ final class PeopleDataManager {
     
     // MARK: Private
     
-    private func groupBySocialDistance(graph: Graph) -> [[Person]] {
+    private func generatePYMKList(from graph: Graph) -> [Person] {
+        // Generate the adjacency list as a dictionary of vertex lists by distance
         let nodeGroups = graph.nodesGroupedByDistance
         
         // Convert the dictionary of groupings into an array of groupings to
@@ -58,10 +58,11 @@ final class PeopleDataManager {
             distance += 1
         }
         
-        return peopleGroups
+        let pymk = Array(peopleGroups.joined())
+        return pymk
     }
     
-    private func constructGraph(from people: [Person]) -> Graph {
+    private func constructPeopleGraph(from people: [Person]) -> Graph {
         let graph = Graph()
         let user = people.first(where: { $0.isUser})
         let others = people.filter({ !$0.isUser })
@@ -113,9 +114,6 @@ final class PeopleDataManager {
                 if neighborNode.distance! > current.distance! {
                     neighborNode.increaseMutualFriendCount()
                 }
-                
-                print("Current -> \(current)")
-                print("Neighbor -> \(neighborNode)")
             }
         }
         
