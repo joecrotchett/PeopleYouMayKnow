@@ -33,7 +33,7 @@ final class PYMKViewController: NiblessViewController {
         
         super.init()
         configureLayout()
-        title = "People You Might Know"
+        title = "People You May Know"
     }
     
     override func viewDidLoad() {
@@ -48,7 +48,7 @@ final class PYMKViewController: NiblessViewController {
 
         tableView.isHidden = true
         activityIndicator.startAnimating()
-        dataManager.getPeopleGroupedBySocialDistance { result in
+        dataManager.getPeopleYouMayKnow { result in
             switch result {
             case .success(let peopleGroups):
                 self.show(peopleGroups)

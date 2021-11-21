@@ -7,34 +7,35 @@
 
 import Foundation
 
-public struct Queue<T> {
-  private var array: [T]
-
-  public init() {
-    array = []
-  }
-
-  public var isEmpty: Bool {
-    return array.isEmpty
-  }
-
-  public var count: Int {
-    return array.count
-  }
-
-  public mutating func enqueue(element: T) {
-    array.append(element)
-  }
-
-  public mutating func dequeue() -> T? {
-    if isEmpty {
-      return nil
-    } else {
-      return array.removeFirst()
+struct Queue {
+    private var array: [Node]
+    
+    init() {
+        array = []
     }
-  }
-
-  public func peek() -> T? {
-    return array.first
-  }
+    
+    var isEmpty: Bool {
+        return array.isEmpty
+    }
+    
+    var count: Int {
+        return array.count
+    }
+    
+    mutating func enqueue(element: Node) {
+        array.append(element)
+    }
+    
+    mutating func dequeue() -> Node? {
+        if isEmpty {
+            return nil
+        } else {
+            return array.removeFirst()
+        }
+    }
+    
+    // Not used
+    func peek() -> Node? {
+        return array.first
+    }
 }

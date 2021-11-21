@@ -15,7 +15,7 @@ struct Person: Decodable {
     let name: String
     let friends: [Int]
     var mutualCount: Int?
-    var isFriendOfUser: Bool?
+    var distance: Int?
     
     var isUser: Bool {
         name == Person.userName

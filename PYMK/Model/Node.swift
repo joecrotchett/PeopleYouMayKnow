@@ -11,7 +11,11 @@ class Node: CustomStringConvertible, Equatable {
     var neighbors: [Edge]
     
     private(set) var person: Person
-    var distance: Int?
+    var distance: Int? {
+        didSet {
+            person.distance = distance
+        }
+    }
     var visited: Bool
     
     init(person: Person) {
@@ -22,7 +26,7 @@ class Node: CustomStringConvertible, Equatable {
     
     var description: String {
         if let distance = distance {
-            return "Node(name: \(person.name), distance: \(distance))"
+            return "Node(name: \(person.name), distance: \(distance), mutualCount: \(person.mutualCount ?? -1)"
         }
         return "Node(name: \(person.name), distance: infinity)"
     }
@@ -35,8 +39,13 @@ class Node: CustomStringConvertible, Equatable {
         neighbors.remove(at: neighbors.firstIndex { $0 === edge }!)
     }
     
-    func markAsFriend() {
-        person.isFriendOfUser = true
+    func increaseMutualFriendCount() {
+        guard let count = person.mutualCount else {
+            person.mutualCount = 1
+            return
+        }
+        
+        person.mutualCount = count + 1
     }
 }
 

@@ -23,7 +23,7 @@ final class PeopleDataManager {
         self.api = api
     }
     
-    func getPeopleGroupedBySocialDistance(completion: @escaping (Result<[[Person]], APIError>) -> Void) {
+    func getPeopleYouMayKnow(completion: @escaping (Result<[[Person]], APIError>) -> Void) {
         api.getPeople { result in
             switch result {
             case .success(let people):
@@ -45,17 +45,14 @@ final class PeopleDataManager {
         // Convert the dictionary of groupings into an array of groupings to
         // make it easier for the tableview datasource to undestand the groupings
         var peopleGroups = [[Person]]()
-        var distance = 1 // Skip over the user group, and the users's friends group
+        var distance = 2 // Skip over the user group, and the users's friends group
         while let group = nodeGroups[distance] {
-            let people = group.map { $0.person }
-//            if distance == 2, let friendNodes = nodeGroups[1] {
-//                let friends = friendNodes.map { $0.person }
-//                let mutualConnections = mutualConnections(friends: friends, others: people)
-//                groupsByDistance.append(mutualConnections)
-//            } else {
-//                groupsByDistance.append(people)
-//            }
-            
+            var people = group.map { $0.person }
+            if distance == 2 {
+                people = people.sorted(by: { lhs, rhs -> Bool in
+                    return lhs.mutualCount ?? -1 > rhs.mutualCount ?? -1
+                })
+            }
             peopleGroups.append(people)
             distance += 1
         }
@@ -85,41 +82,41 @@ final class PeopleDataManager {
             for friend in person.friends {
                 if let friendNode = nodes[friend], let personNode = personNode {
                     graph.addEdge(personNode, neighbor: friendNode)
-                    if personNode == userNode {
-                        friendNode.markAsFriend()
-                    }
                 }
             }
         }
-
+        
         return breadthFirstSearchShortestPath(graph: graph, source: userNode)
     }
     
     private func breadthFirstSearchShortestPath(graph: Graph, source: Node) -> Graph {
-      let shortestPathGraph = graph.duplicate()
-
-      var queue = Queue<Node>()
-      let sourceInShortestPathsGraph = shortestPathGraph.findNode(with: source.person.id)
-      queue.enqueue(element: sourceInShortestPathsGraph)
-      sourceInShortestPathsGraph.distance = 0
-
-      while let current = queue.dequeue() {
-        for edge in current.neighbors {
-          let neighborNode = edge.neighbor
-          if !neighborNode.hasDistance {
-            queue.enqueue(element: neighborNode)
-            neighborNode.distance = current.distance! + 1
-          }
+        let shortestPathGraph = graph.duplicate()
+        
+        var queue = Queue()
+        let sourceInShortestPathsGraph = shortestPathGraph.findNode(with: source.person.id)
+        queue.enqueue(element: sourceInShortestPathsGraph)
+        sourceInShortestPathsGraph.distance = 0
+        
+        while let current = queue.dequeue() {
+            for edge in current.neighbors {
+                let neighborNode = edge.neighbor
+                if !neighborNode.hasDistance {
+                    queue.enqueue(element: neighborNode)
+                    neighborNode.distance = current.distance! + 1
+                }
+                
+                // At each level of the tree, determine the number of mutual connections
+                // to the neightbor nodes
+                if neighborNode.distance! > current.distance! {
+                    neighborNode.increaseMutualFriendCount()
+                }
+                
+                print("Current -> \(current)")
+                print("Neighbor -> \(neighborNode)")
+            }
         }
-      }
-
-      return shortestPathGraph
+        
+        return shortestPathGraph
     }
-    
-//    private func mutualConnections(friends: [Person], others: [Person]) -> [Person] {
-//        for person in others {
-//
-//        }
-//    }
 }
 
