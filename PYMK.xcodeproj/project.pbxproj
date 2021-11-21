@@ -19,6 +19,14 @@
 		D88D2C7C2749A22700F7481F /* JSONAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C7A2749A22700F7481F /* JSONAPI.swift */; };
 		D88D2C7F2749B7D300F7481F /* NiblessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C7E2749B7D300F7481F /* NiblessViewController.swift */; };
 		D88D2C812749BBAF00F7481F /* StyleGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C802749BBAF00F7481F /* StyleGuide.swift */; };
+		D88D2C832749FE2500F7481F /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C822749FE2500F7481F /* Edge.swift */; };
+		D88D2C842749FE2500F7481F /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C822749FE2500F7481F /* Edge.swift */; };
+		D88D2C862749FE4E00F7481F /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C852749FE4E00F7481F /* Graph.swift */; };
+		D88D2C872749FE4E00F7481F /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C852749FE4E00F7481F /* Graph.swift */; };
+		D88D2C892749FE7B00F7481F /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C882749FE7B00F7481F /* Node.swift */; };
+		D88D2C8A2749FE7B00F7481F /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C882749FE7B00F7481F /* Node.swift */; };
+		D88D2C8C2749FEA500F7481F /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C8B2749FEA500F7481F /* Queue.swift */; };
+		D88D2C8D2749FEA500F7481F /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D2C8B2749FEA500F7481F /* Queue.swift */; };
 		D8E43A5E27497CF3009A8931 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E43A5D27497CF3009A8931 /* AppDelegate.swift */; };
 		D8E43A6227497CF3009A8931 /* PYMKViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E43A6127497CF3009A8931 /* PYMKViewController.swift */; };
 		D8E43A6727497CF5009A8931 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8E43A6627497CF5009A8931 /* Assets.xcassets */; };
@@ -52,6 +60,10 @@
 		D88D2C7A2749A22700F7481F /* JSONAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONAPI.swift; sourceTree = "<group>"; };
 		D88D2C7E2749B7D300F7481F /* NiblessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiblessViewController.swift; sourceTree = "<group>"; };
 		D88D2C802749BBAF00F7481F /* StyleGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleGuide.swift; sourceTree = "<group>"; };
+		D88D2C822749FE2500F7481F /* Edge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
+		D88D2C852749FE4E00F7481F /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
+		D88D2C882749FE7B00F7481F /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		D88D2C8B2749FEA500F7481F /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		D8E43A5A27497CF3009A8931 /* PYMK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PYMK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E43A5D27497CF3009A8931 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8E43A6127497CF3009A8931 /* PYMKViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PYMKViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +113,10 @@
 			children = (
 				D88D2C6E274992EC00F7481F /* PeopleDataManager.swift */,
 				D88D2C712749936400F7481F /* Person.swift */,
+				D88D2C822749FE2500F7481F /* Edge.swift */,
+				D88D2C852749FE4E00F7481F /* Graph.swift */,
+				D88D2C882749FE7B00F7481F /* Node.swift */,
+				D88D2C8B2749FEA500F7481F /* Queue.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -301,11 +317,15 @@
 				D88D2C722749936400F7481F /* Person.swift in Sources */,
 				D88D2C6F274992EC00F7481F /* PeopleDataManager.swift in Sources */,
 				D88D2C6C2749922300F7481F /* UITableView+Dequeue.swift in Sources */,
+				D88D2C892749FE7B00F7481F /* Node.swift in Sources */,
+				D88D2C8C2749FEA500F7481F /* Queue.swift in Sources */,
 				D88D2C7B2749A22700F7481F /* JSONAPI.swift in Sources */,
 				D88D2C762749944E00F7481F /* PeopleAPI.swift in Sources */,
 				D88D2C7F2749B7D300F7481F /* NiblessViewController.swift in Sources */,
 				D8E43A6227497CF3009A8931 /* PYMKViewController.swift in Sources */,
+				D88D2C862749FE4E00F7481F /* Graph.swift in Sources */,
 				D8E43A5E27497CF3009A8931 /* AppDelegate.swift in Sources */,
+				D88D2C832749FE2500F7481F /* Edge.swift in Sources */,
 				D88D2C812749BBAF00F7481F /* StyleGuide.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -316,8 +336,12 @@
 			files = (
 				D88D2C732749936400F7481F /* Person.swift in Sources */,
 				D88D2C772749944E00F7481F /* PeopleAPI.swift in Sources */,
+				D88D2C872749FE4E00F7481F /* Graph.swift in Sources */,
+				D88D2C8A2749FE7B00F7481F /* Node.swift in Sources */,
+				D88D2C842749FE2500F7481F /* Edge.swift in Sources */,
 				D88D2C70274992EC00F7481F /* PeopleDataManager.swift in Sources */,
 				D88D2C7C2749A22700F7481F /* JSONAPI.swift in Sources */,
+				D88D2C8D2749FEA500F7481F /* Queue.swift in Sources */,
 				D8E43A7527497CF6009A8931 /* PYMKTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
