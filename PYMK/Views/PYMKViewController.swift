@@ -25,7 +25,7 @@ final class PYMKViewController: NiblessViewController {
         return tableView
     }()
     
-    private var people = [Person]()
+    private var peopleGroups = [[Person]]()
     
     override init() {
         let api = JSONAPI(filename: "mock")
@@ -48,10 +48,10 @@ final class PYMKViewController: NiblessViewController {
 
         tableView.isHidden = true
         activityIndicator.startAnimating()
-        dataManager.getPeople { result in
+        dataManager.getPeopleGroupedBySocialDistance { result in
             switch result {
-            case .success(let people):
-                self.show(people)
+            case .success(let peopleGroups):
+                self.show(peopleGroups)
             case .failure(let error):
                 self.show(error)
             }
@@ -67,8 +67,9 @@ final class PYMKViewController: NiblessViewController {
         // TODO: Show error dialog
     }
     
-    func show(_ people: [Person]) {
-        self.people = people
+    func show(_ peopleGroups: [[Person]]) {
+        self.peopleGroups = peopleGroups
+        print(peopleGroups)
         activityIndicator.stopAnimating()
         tableView.isHidden = false
         tableView.reloadData()
@@ -103,9 +104,13 @@ final class PYMKViewController: NiblessViewController {
 // MARK: UITableViewDataSource
 
 extension PYMKViewController: UITableViewDataSource {
-
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        peopleGroups.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        people.count
+        peopleGroups[section].count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -113,9 +118,10 @@ extension PYMKViewController: UITableViewDataSource {
 //        let result = results[indexPath.row]
 //        cell.configure(with: result)
 //
-        let person = people[indexPath.row]
+        let person = peopleGroups[indexPath.section][indexPath.row]
         let cell = UITableViewCell()
         cell.textLabel?.text = person.name
+        cell.detailTextLabel?.text = "Social Distance: \(indexPath.row + 1)"
         return cell
     }
 }
@@ -125,7 +131,7 @@ extension PYMKViewController: UITableViewDataSource {
 extension PYMKViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard !people.isEmpty else {
+        guard !peopleGroups[section].isEmpty else {
             return 0
         }
         
@@ -133,7 +139,7 @@ extension PYMKViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection sectionIndex: Int) -> UIView? {
-        guard !people.isEmpty else {
+        guard !peopleGroups[sectionIndex].isEmpty else {
             return nil
         }
         

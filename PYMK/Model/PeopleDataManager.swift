@@ -9,6 +9,8 @@ import Foundation
 
 final class PeopleDataManager {
     
+    let userName = "Facebook Candidate"
+    
     private let api: PeopleAPI
     private var pymk = [[Person]]()
     
@@ -22,11 +24,12 @@ final class PeopleDataManager {
     data from the API, and in this case, a json file,  but it's still a good pattern to have in place in the event that we
     wanted to introduce other data access objects, like persisting data in a local data store, for example.
     */
-    func getPeople(completion: @escaping (Result<[Person], APIError>) -> Void) {
+    func getPeopleGroupedBySocialDistance(completion: @escaping (Result<[[Person]], APIError>) -> Void) {
         api.getPeople { result in
             switch result {
             case .success(let people):
-                completion(.success(people))
+                let groups = self.groupBySocialDistance(people: people)
+                completion(.success(groups))
 
             case .failure(let error):
                 completion(.failure(error))
@@ -34,12 +37,37 @@ final class PeopleDataManager {
         }
     }
     
-    private func constructGraph(from people: [Person]) {
-        let graph = Graph()
+    private func groupBySocialDistance(people: [Person]) -> [[Person]] {
+        let graph = self.constructGraph(from: people)
+        guard let nodeGroups = graph?.nodesGroupedByDistance else { return [] }
         
+        var groupsByDistance = [[Person]]()
+        var distance = 1
+        while let group = nodeGroups[distance] {
+            let people = group.map { $0.person }
+            groupsByDistance.append(people)
+            distance += 1
+        }
+        
+        return groupsByDistance
+    }
+    
+    private func constructGraph(from people: [Person]) -> Graph? {
+        let user = people.first(where: { $0.name ==  userName})
+        let others = people.filter({ $0.name != userName })
+        
+        guard let user = user, !others.isEmpty else {
+            return nil
+        }
+        
+        let graph = Graph()
         var nodes = [Int: Node]()
-        for person in people {
-            nodes[person.id] = graph.addNode(id: person.id)
+        
+        let userNode = graph.addNode(person: user)
+        nodes[user.id] = userNode
+        
+        for person in others {
+            nodes[person.id] = graph.addNode(person: person)
         }
         
         for person in people {
@@ -51,33 +79,14 @@ final class PeopleDataManager {
             }
         }
 
-//        let nodeA = graph.addNode(id: 1)
-//        let nodeB = graph.addNode(id: 2)
-//        let nodeC = graph.addNode(id: 3)
-//        let nodeD = graph.addNode(id: 4)
-//        let nodeE = graph.addNode(id: 5)
-//        let nodeF = graph.addNode(id: 6)
-//        let nodeG = graph.addNode(id: 7)
-//        let nodeH = graph.addNode(id: 8)
-//
-//        graph.addEdge(nodeA, neighbor: nodeB)
-//        graph.addEdge(nodeA, neighbor: nodeC)
-//        graph.addEdge(nodeB, neighbor: nodeD)
-//        graph.addEdge(nodeB, neighbor: nodeA)
-//        graph.addEdge(nodeB, neighbor: nodeE)
-//        graph.addEdge(nodeC, neighbor: nodeF)
-//        graph.addEdge(nodeC, neighbor: nodeG)
-//        graph.addEdge(nodeE, neighbor: nodeH)
-
-//        let shortestPathGraph = breadthFirstSearchShortestPath(graph: graph, source: nodeA)
-//        print(shortestPathGraph.nodes)
+        return breadthFirstSearchShortestPath(graph: graph, source: userNode)
     }
     
     private func breadthFirstSearchShortestPath(graph: Graph, source: Node) -> Graph {
       let shortestPathGraph = graph.duplicate()
 
       var queue = Queue<Node>()
-      let sourceInShortestPathsGraph = shortestPathGraph.findNode(with: source.id)
+      let sourceInShortestPathsGraph = shortestPathGraph.findNode(with: source.person.id)
       queue.enqueue(element: sourceInShortestPathsGraph)
       sourceInShortestPathsGraph.distance = 0
 
@@ -93,29 +102,5 @@ final class PeopleDataManager {
 
       return shortestPathGraph
     }
-
-    
-    
-//    func findEdges(for knowns: [Person], from unknowns: [Person]) {
-//        var edgesFound = false
-//        guard list.count > 0 else {
-//            return
-//        }
-//        
-//        var found: [People]()
-//        var remaining
-//        
-//        for unknown in unknowns {
-//            for known in knowns {
-//                for unknownFriend in unknown.friends {
-//                    if unknownFriend == known.id {
-//                        
-//                    }
-//                }
-//            }
-//        }
-//        
-//        return
-//    }
 }
 

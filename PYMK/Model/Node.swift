@@ -7,35 +7,35 @@
 
 import Foundation
 
-public class Node: CustomStringConvertible, Equatable {
-  public var neighbors: [Edge]
+class Node: CustomStringConvertible, Equatable {
+  var neighbors: [Edge]
 
-  public private(set) var id: Int
-  public var distance: Int?
-  public var visited: Bool
+  private(set) var person: Person
+  var distance: Int?
+  var visited: Bool
 
-  public init(id: Int) {
-    self.id = id
+  init(person: Person) {
+    self.person = person
     neighbors = []
     visited = false
   }
 
-  public var description: String {
+  var description: String {
     if let distance = distance {
-      return "Node(label: \(id), distance: \(distance))"
+      return "Node(name: \(person.name), distance: \(distance))"
     }
-    return "Node(label: \(id), distance: infinity)"
+    return "Node(name: \(person.name), distance: infinity)"
   }
 
-  public var hasDistance: Bool {
+  var hasDistance: Bool {
     return distance != nil
   }
 
-  public func remove(edge: Edge) {
+  func remove(edge: Edge) {
       neighbors.remove(at: neighbors.firstIndex { $0 === edge }!)
   }
 }
 
-public func == (lhs: Node, rhs: Node) -> Bool {
-  return lhs.id == rhs.id && lhs.neighbors == rhs.neighbors
+func == (lhs: Node, rhs: Node) -> Bool {
+  return lhs.person.id == rhs.person.id && lhs.neighbors == rhs.neighbors
 }
