@@ -24,8 +24,6 @@
 		D8E43A6727497CF5009A8931 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8E43A6627497CF5009A8931 /* Assets.xcassets */; };
 		D8E43A6A27497CF5009A8931 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8E43A6827497CF5009A8931 /* LaunchScreen.storyboard */; };
 		D8E43A7527497CF6009A8931 /* PYMKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E43A7427497CF6009A8931 /* PYMKTests.swift */; };
-		D8E43A7F27497CF6009A8931 /* PYMKUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E43A7E27497CF6009A8931 /* PYMKUITests.swift */; };
-		D8E43A8127497CF6009A8931 /* PYMKUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E43A8027497CF6009A8931 /* PYMKUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,8 +61,6 @@
 		D8E43A7027497CF6009A8931 /* PYMKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PYMKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E43A7427497CF6009A8931 /* PYMKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PYMKTests.swift; sourceTree = "<group>"; };
 		D8E43A7A27497CF6009A8931 /* PYMKUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PYMKUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8E43A7E27497CF6009A8931 /* PYMKUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PYMKUITests.swift; sourceTree = "<group>"; };
-		D8E43A8027497CF6009A8931 /* PYMKUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PYMKUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,7 +128,6 @@
 			children = (
 				D8E43A5C27497CF3009A8931 /* PYMK */,
 				D8E43A7327497CF6009A8931 /* PYMKTests */,
-				D8E43A7D27497CF6009A8931 /* PYMKUITests */,
 				D8E43A5B27497CF3009A8931 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -155,11 +150,11 @@
 				D88D2C6D2749929800F7481F /* Model */,
 				D88D2C6A274991EC00F7481F /* Extensions */,
 				D8E43A5D27497CF3009A8931 /* AppDelegate.swift */,
+				D88D2C802749BBAF00F7481F /* StyleGuide.swift */,
 				D8E43A6627497CF5009A8931 /* Assets.xcassets */,
 				D8E43A6827497CF5009A8931 /* LaunchScreen.storyboard */,
 				D8E43A6B27497CF5009A8931 /* Info.plist */,
 				D88D2C782749990000F7481F /* mock.json */,
-				D88D2C802749BBAF00F7481F /* StyleGuide.swift */,
 			);
 			path = PYMK;
 			sourceTree = "<group>";
@@ -170,15 +165,6 @@
 				D8E43A7427497CF6009A8931 /* PYMKTests.swift */,
 			);
 			path = PYMKTests;
-			sourceTree = "<group>";
-		};
-		D8E43A7D27497CF6009A8931 /* PYMKUITests */ = {
-			isa = PBXGroup;
-			children = (
-				D8E43A7E27497CF6009A8931 /* PYMKUITests.swift */,
-				D8E43A8027497CF6009A8931 /* PYMKUITestsLaunchTests.swift */,
-			);
-			path = PYMKUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -340,8 +326,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8E43A7F27497CF6009A8931 /* PYMKUITests.swift in Sources */,
-				D8E43A8127497CF6009A8931 /* PYMKUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
