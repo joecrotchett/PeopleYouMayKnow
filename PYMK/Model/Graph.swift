@@ -7,63 +7,49 @@
 
 import Foundation
 
-class Graph: CustomStringConvertible, Equatable {
-    private(set) var nodes: [Node]
-    
-    init() {
-        self.nodes = []
-    }
+class Graph: Equatable {
+    private(set) var vertices = [Vertex]()
     
     @discardableResult
-    func addNode(person: Person) -> Node {
-        let node = Node(person: person)
-        nodes.append(node)
-        return node
+    func addVertex(person: Person) -> Vertex {
+        let vertex = Vertex(person: person)
+        vertices.append(vertex)
+        return vertex
     }
     
-    func addEdge(_ source: Node, neighbor: Node) {
+    func addEdge(_ source: Vertex, neighbor: Vertex) {
         let edge = Edge(neighbor: neighbor)
         source.neighbors.append(edge)
     }
     
-    var description: String {
-        var description = ""
-        
-        for node in nodes {
-            if !node.neighbors.isEmpty {
-                description += "[node: \(node) edges: \(node.neighbors.map { $0.neighbor.person.name})]"
-            }
-        }
-        return description
-    }
-    
-    func findNode(with id: Int) -> Node {
-        return nodes.filter { $0.person.id == id }.first!
+    func findVertex(with id: Int) -> Vertex? {
+        return vertices.filter { $0.person.id == id }.first
     }
     
     func duplicate() -> Graph {
         let duplicated = Graph()
         
-        for node in nodes {
-            duplicated.addNode(person: node.person)
+        for vertex in vertices {
+            duplicated.addVertex(person: vertex.person)
         }
         
-        for node in nodes {
-            for edge in node.neighbors {
-                let source = duplicated.findNode(with: node.person.id)
-                let neighbour = duplicated.findNode(with: edge.neighbor.person.id)
-                duplicated.addEdge(source, neighbor: neighbour)
+        for vertex in vertices {
+            for edge in vertex.neighbors {
+                if let source = duplicated.findVertex(with: vertex.person.id),
+                   let neighbour = duplicated.findVertex(with: edge.neighbor.person.id) {
+                    duplicated.addEdge(source, neighbor: neighbour)
+                }
             }
         }
         
         return duplicated
     }
     
-    var nodesGroupedByDistance: [Int: [Node]] {
-        Dictionary.init(grouping: nodes, by: { $0.distance ?? 0 })
+    var verticesGroupedByDistance: [Int: [Vertex]] {
+        Dictionary.init(grouping: vertices, by: { $0.distance ?? 0 })
     }
 }
 
 func == (lhs: Graph, rhs: Graph) -> Bool {
-    return lhs.nodes == rhs.nodes
+    return lhs.vertices == rhs.vertices
 }

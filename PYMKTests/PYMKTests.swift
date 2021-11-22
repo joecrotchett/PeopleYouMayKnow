@@ -28,7 +28,6 @@ class PYMKTests: XCTestCase {
     
     private var people = [Person]()
     
-    // Swift
     override func setUp() {
         super.setUp()
 
@@ -49,7 +48,6 @@ class PYMKTests: XCTestCase {
             exp.fulfill()
         }
 
-        // Wait for the async request to complete
         waitForExpectations(timeout: 10, handler: nil)
     }
     

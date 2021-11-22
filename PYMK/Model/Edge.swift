@@ -8,13 +8,13 @@
 import Foundation
 
 class Edge: Equatable {
-  var neighbor: Node
-
-  init(neighbor: Node) {
-    self.neighbor = neighbor
-  }
+    var neighbor: Vertex
+    
+    init(neighbor: Vertex) {
+        self.neighbor = neighbor
+    }
 }
 
 func == (lhs: Edge, rhs: Edge) -> Bool {
-  return lhs.neighbor == rhs.neighbor
+    return lhs.neighbor == rhs.neighbor
 }

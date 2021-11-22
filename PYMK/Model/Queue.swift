@@ -8,7 +8,7 @@
 import Foundation
 
 struct Queue {
-    private var array: [Node]
+    private var array: [Vertex]
     
     init() {
         array = []
@@ -18,24 +18,15 @@ struct Queue {
         return array.isEmpty
     }
     
-    var count: Int {
-        return array.count
-    }
-    
-    mutating func enqueue(element: Node) {
+    mutating func enqueue(element: Vertex) {
         array.append(element)
     }
     
-    mutating func dequeue() -> Node? {
+    mutating func dequeue() -> Vertex? {
         if isEmpty {
             return nil
         } else {
             return array.removeFirst()
         }
-    }
-    
-    // Not used
-    func peek() -> Node? {
-        return array.first
     }
 }

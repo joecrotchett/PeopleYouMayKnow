@@ -1,5 +1,5 @@
 //
-//  Node.swift
+//  vertex.swift
 //  PYMK
 //
 //  Created by Joe on 11/20/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Node: CustomStringConvertible, Equatable {
+class Vertex: Equatable {
     var neighbors: [Edge]
     
     private(set) var person: Person
@@ -16,27 +16,14 @@ class Node: CustomStringConvertible, Equatable {
             person.distance = distance
         }
     }
-    var visited: Bool
     
     init(person: Person) {
         self.person = person
         neighbors = []
-        visited = false
-    }
-    
-    var description: String {
-        if let distance = distance {
-            return "Node(name: \(person.name), distance: \(distance), mutualCount: \(person.mutualCount ?? -1)"
-        }
-        return "Node(name: \(person.name), distance: infinity)"
     }
     
     var hasDistance: Bool {
         return distance != nil
-    }
-    
-    func remove(edge: Edge) {
-        neighbors.remove(at: neighbors.firstIndex { $0 === edge }!)
     }
     
     func increaseMutualFriendCount() {
@@ -49,6 +36,6 @@ class Node: CustomStringConvertible, Equatable {
     }
 }
 
-func == (lhs: Node, rhs: Node) -> Bool {
+func == (lhs: Vertex, rhs: Vertex) -> Bool {
     return lhs.person.id == rhs.person.id && lhs.neighbors == rhs.neighbors
 }
