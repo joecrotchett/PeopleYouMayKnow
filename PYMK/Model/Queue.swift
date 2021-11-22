@@ -8,11 +8,7 @@
 import Foundation
 
 struct Queue {
-    private var array: [Vertex]
-    
-    init() {
-        array = []
-    }
+    private var array = [Vertex]()
     
     var isEmpty: Bool {
         return array.isEmpty

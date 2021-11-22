@@ -23,6 +23,44 @@ final class PeopleDataManager {
         self.api = api
     }
     
+    // MARK: Public Interface
+    
+    /**
+     Description of algorithm
+     -----------------
+     To generate the list of relationships between the people, with the lowest degree of separation between
+     each person in the graph, I'm using an Adjacency List to represent the graph of relationships between
+     friends, and I'm using Breadth First Search to generate a graph that represents the shortest distance
+     from the Meta candidate,to every other person in the graph. Once the shortest path graph is generated,
+     I'm using a dictionary to group each person by their distance, and then I use IntroSort to sort the friends
+     of friends by their number of mutual friends.The total time complexity for the algorithm is O(n log n).
+     
+     Runtime analytics for construct person graph: `O(n) + O(n) + O(n) + O(m) == O(n + m), n = person count, m = total number of friendships
+     --------------------------------
+     1) Find candidate user in person list: O(n)
+     2) Create list representing all other persons: O(n)
+     3) Add vertices for each person in the list: O(n)
+     4) Add edges between people and their friends: O(m)
+     
+     Runtime analytics for constructing short path graph: `O(n) + O(n) + O(n) + O(m) == O(n + m), n = person count, m = total number of friendships
+     --------------------------------
+     1) Duplicate relationship graph: O(n)
+     2) Find source vertex: O(n)
+     3) Generate shortest path graph: O(n+m)
+     
+     Runtime analysis for generating the list of people, sorted by social distance, and mutual friendships: `O(n) + O(n log n) + O(n)== O(n logn)
+     ----------------------------------------------------------------------
+     1) Group people by their distance from the Meta candidate: O(n)
+     2) Sort friends of friends by their number of mutual friendships: O(n log n)
+     3) Flatten groupings into one list: O(n)
+     
+     `Total time complexity: O(n + m) + O(n + m) + O(n logn) == O(n log n)
+    */
+    
+    /**
+     Retrieves the list of Person objects from the API, constructs the person graph, and generates the list of
+     people you may know.
+    */
     func getPeopleYouMayKnow(completion: @escaping (Result<[Person], APIError>) -> Void) {
         api.getPeople { result in
             switch result {
@@ -39,6 +77,9 @@ final class PeopleDataManager {
     
     // MARK: Private
     
+    /**
+     Generates the list of people, sorted by social distance, and mutual friendships
+    */
     private func generatePYMKList(from graph: Graph) -> [Person] {
         // Generate the adjacency list as a dictionary of vertex lists by distance
         let vertexGroups = graph.verticesGroupedByDistance
@@ -62,6 +103,9 @@ final class PeopleDataManager {
         return pymk
     }
     
+    /**
+    Generates the person graph from a list of persons to represent the friendships between those people
+    */
     private func constructPeopleGraph(from people: [Person]) -> Graph {
         let graph = Graph()
         let user = people.first(where: { $0.isUser})
@@ -91,6 +135,9 @@ final class PeopleDataManager {
         return bfs(graph: graph, source: userVertex)
     }
     
+    /**
+    Generates the shortest path graph, from a source vertex to every other vertex in the graph, using an existing graph
+    */
     private func bfs(graph: Graph, source: Vertex) -> Graph {
         let shortestPathGraph = graph.duplicate()
         
